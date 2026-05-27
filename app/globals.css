@@ -1,26 +1,188 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans:     var(--font-inter);
+  --font-display:  var(--font-urbanist);
+  --font-mono:     var(--font-geist-mono);
+
+  /* ── 108 Rays Design Tokens ── */
+  --color-surface:       #FAFAFA;
+  --color-surface-2:     #F4F4F6;
+  --color-ink:           #09090B;
+  --color-ink-2:         #050508;
+  --color-accent:        #09090B;
+  --color-accent-light:  #71717A;
+  --color-accent-dark:   #050508;
+  --color-muted:         #71717A;
+  --color-border:        rgba(9,9,11,.10);
+  --color-border-dark:   rgba(255,255,255,.07);
+
+  --color-sidebar-ring:                var(--sidebar-ring);
+  --color-sidebar-border:              var(--sidebar-border);
+  --color-sidebar-accent-foreground:   var(--sidebar-accent-foreground);
+  --color-sidebar-accent:              var(--sidebar-accent);
+  --color-sidebar-primary-foreground:  var(--sidebar-primary-foreground);
+  --color-sidebar-primary:             var(--sidebar-primary);
+  --color-sidebar-foreground:          var(--sidebar-foreground);
+  --color-sidebar:                     var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring:               var(--ring);
+  --color-input:              var(--input);
+  --color-border:             var(--border);
+  --color-destructive:        var(--destructive);
+  --color-accent-foreground:  var(--accent-foreground);
+  --color-accent:             var(--accent);
+  --color-muted-foreground:   var(--muted-foreground);
+  --color-muted:              var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary:          var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary:            var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover:            var(--popover);
+  --color-card-foreground:    var(--card-foreground);
+  --color-card:               var(--card);
+  --radius-sm:  calc(var(--radius) * 0.6);
+  --radius-md:  calc(var(--radius) * 0.8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --background:           #FAFAFA;
+  --foreground:           #09090B;
+  --card:                 #ffffff;
+  --card-foreground:      #09090B;
+  --popover:              #ffffff;
+  --popover-foreground:   #09090B;
+  --primary:              #09090B;
+  --primary-foreground:   #ffffff;
+  --secondary:            #F4F4F6;
+  --secondary-foreground: #09090B;
+  --muted:                #F4F4F6;
+  --muted-foreground:     #71717A;
+  --accent:               #09090B;
+  --accent-foreground:    #ffffff;
+  --destructive:          #ef4444;
+  --border:               rgba(9,9,11,.08);
+  --input:                rgba(9,9,11,.06);
+  --ring:                 #09090B;
+  --radius:               0.625rem;
+  --sidebar:              #FAFAFA;
+  --sidebar-foreground:   #09090B;
+  --sidebar-primary:      #09090B;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent:       #F4F4F6;
+  --sidebar-accent-foreground: #09090B;
+  --sidebar-border:       rgba(9,9,11,.10);
+  --sidebar-ring:         #09090B;
+  --chart-1: #09090B;
+  --chart-2: #18181B;
+  --chart-3: #71717A;
+  --chart-4: #52525B;
+  --chart-5: #A1A1AA;
 }
 
+.dark {
+  --background: #050508;
+  --foreground: #FAFAFA;
+}
+
+/* ── Base ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter, sans-serif);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Accent gradient text ── */
+.text-accent-gradient {
+  color: #09090B;
+  -webkit-text-fill-color: #09090B;
+}
+.text-accent-static {
+  color: #09090B;
+  -webkit-text-fill-color: #09090B;
+}
+@keyframes accent-sweep {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* ── Orbital ring animations ── */
+@keyframes spin-cw  { from { transform: translate(-50%,-50%) rotate(0deg);   } to { transform: translate(-50%,-50%) rotate(360deg);  } }
+@keyframes spin-ccw { from { transform: translate(-50%,-50%) rotate(0deg);   } to { transform: translate(-50%,-50%) rotate(-360deg); } }
+@keyframes orb-breathe {
+  0%,100% { opacity: .8;  transform: scale(1);    }
+  50%     { opacity: .45; transform: scale(1.1);  }
+}
+@keyframes scroll-drip {
+  0%   { transform: scaleY(0); transform-origin: top;    }
+  48%  { transform: scaleY(1); transform-origin: top;    }
+  52%  { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+@keyframes float-y {
+  0%,100% { transform: translateY(0px);  }
+  50%     { transform: translateY(-10px);}
+}
+
+/* ── Noise overlay ── */
+.noise-overlay {
+  position: fixed; inset: 0;
+  z-index: 9000; pointer-events: none; opacity: .018;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px;
+}
+
+/* ── Grid texture ── */
+.grid-bg {
+  background-image:
+    linear-gradient(rgba(9,9,11,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(9,9,11,.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.grid-bg-dark {
+  background-image:
+    linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+/* ── Clip for headline line animations ── */
+.clip-line { overflow: hidden; display: block; }
+
+/* ── Section anchor offset ── */
+section { scroll-margin-top: 80px; }
+
+/* ── HoverButton overrides for accent colors ── */
+.btn-accent {
+  --circle-start: #A5B4FC !important;
+  --circle-end:   #4338CA !important;
+  color: white !important;
+}
+.btn-accent-dark {
+  --circle-start: #C7D2FE !important;
+  --circle-end:   #818CF8 !important;
+  color: white !important;
+}
+.btn-outline-glass {
+  --circle-start: #6366F1 !important;
+  --circle-end:   #4338CA !important;
 }
