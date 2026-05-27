@@ -422,10 +422,10 @@ export default function SpiritsOfHimalayasPage() {
             </motion.div>
             <div className="grid sm:grid-cols-2 gap-x-12">
               {HIGHLIGHTS.map((h, i) => (
-                <motion.div key={i} className="flex items-start gap-3 py-3.5 border-b" style={{ borderColor: "rgba(9,9,11,0.07)" }}
+                <motion.div key={i} className="flex items-start gap-3 py-3.5 border-b"
+                  style={{ borderColor: "rgba(9,9,11,0.07)", borderRadius: "6px", paddingLeft: "2px", marginLeft: "-2px" }}
                   initial={{ opacity: 0, x: -10 }} animate={highlightsInView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.5, delay: 0.06 + i * 0.055, ease: EXPO }}
-                  whileHover={{ x: 5, backgroundColor: EML(0.04) }}
-                  style={{ borderRadius: "6px", paddingLeft: "2px", marginLeft: "-2px" }}>
+                  whileHover={{ x: 5, backgroundColor: EML(0.04) }}>
                   <span className="mt-2.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: EML(0.28) }} />
                   <p className="font-[family-name:var(--font-inter)] text-[13.5px] leading-[1.72]" style={{ color: "#52525B" }}>{h}</p>
                 </motion.div>
