@@ -258,13 +258,13 @@ export default function FaqsPage() {
           </motion.p>
 
           {/* Headline */}
-          <div className="overflow-hidden mb-6">
+          <div className="overflow-hidden mb-6 w-full">
             <motion.h1
               initial={{ y: "105%" }}
               animate={{ y: "0%" }}
               transition={{ duration: 0.95, delay: 0.2, ease: EXPO }}
               className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.06] tracking-[-0.04em] text-white"
-              style={{ fontSize: "clamp(42px,6vw,88px)" }}
+              style={{ fontSize: "clamp(14px,5.5vw,88px)" }}
             >
               Questions, answered.
             </motion.h1>

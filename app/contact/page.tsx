@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -42,11 +42,13 @@ function Field({
   type = "text",
   textarea = false,
   required = true,
+  name,
 }: {
   label: string;
   type?: string;
   textarea?: boolean;
   required?: boolean;
+  name: string;
 }) {
   const [focused, setFocused] = useState(false);
   const [filled, setFilled] = useState(false);
@@ -61,6 +63,7 @@ function Field({
       {textarea ? (
         <textarea
           rows={4}
+          name={name}
           required={required}
           placeholder={label}
           className={`${base} pt-1 leading-[1.7]`}
@@ -75,6 +78,7 @@ function Field({
       ) : (
         <input
           type={type}
+          name={name}
           required={required}
           placeholder={label}
           className={`${base} h-9 pt-1`}
@@ -167,9 +171,16 @@ function Checkbox({
 
 /* ── Apply form ──────────────────────────────────────────────── */
 function ApplyForm() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<string[]>([]);
   const [privacy, setPrivacy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+
+  useEffect(() => {
+    if (submitted) containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [submitted]);
 
   const toggle = (o: string) =>
     setSelected((prev) =>
@@ -178,37 +189,53 @@ function ApplyForm() {
 
   if (submitted) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: EXPO }}
-        className="py-20 text-center"
-      >
-        <p
-          className="font-[family-name:var(--font-urbanist)] font-medium text-[22px] tracking-[-0.02em] mb-3"
-          style={{ color: "#09090B" }}
+      <div ref={containerRef} className="scroll-mt-24">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EXPO }}
+          className="py-20 text-center"
         >
-          Application received.
-        </p>
-        <p
-          className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.75]"
-          style={{ color: "#71717A" }}
-        >
-          We'll review your application and get back to you within 5 working
-          days.
-        </p>
-      </motion.div>
+          <p
+            className="font-[family-name:var(--font-urbanist)] font-medium text-[22px] tracking-[-0.02em] mb-3"
+            style={{ color: "#09090B" }}
+          >
+            Application received.
+          </p>
+          <p
+            className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.75]"
+            style={{ color: "#71717A" }}
+          >
+            We'll review your application and get back to you within 5 working
+            days.
+          </p>
+        </motion.div>
+      </div>
     );
   }
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        setSubmitted(true);
+        setSubmitting(true);
+        setSubmitError(false);
+        const data = new FormData(e.currentTarget);
+        try {
+          const res = await fetch("https://formspree.io/f/maqkvwdo", {
+            method: "POST",
+            body: data,
+            headers: { Accept: "application/json" },
+          });
+          if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+        } catch { setSubmitError(true); }
+        setSubmitting(false);
       }}
       className="space-y-8"
     >
+      <input type="hidden" name="_subject" value="New Application – 108 Rays" />
+      <input type="hidden" name="interested_in" value={selected.join(", ")} />
+
       {/* Offerings checkboxes */}
       <div>
         <p
@@ -238,16 +265,17 @@ function ApplyForm() {
 
       {/* Fields */}
       <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
-        <Field label="Full Name" />
-        <Field label="Email" type="email" />
-        <Field label="Mobile" type="tel" />
-        <Field label="City" />
-        <Field label="Company" />
-        <Field label="Website / LinkedIn" />
+        <Field label="Full Name" name="full_name" />
+        <Field label="Email" type="email" name="email" />
+        <Field label="Mobile" type="tel" name="mobile" />
+        <Field label="City" name="city" />
+        <Field label="Company" name="company" />
+        <Field label="Website / LinkedIn" name="website_linkedin" />
       </div>
       <Field
         label="Tell us briefly about your business and what you're looking for"
         textarea
+        name="message"
       />
 
       {/* Privacy */}
@@ -257,14 +285,21 @@ function ApplyForm() {
         onChange={() => setPrivacy(!privacy)}
       />
 
+      {submitError && (
+        <p className="font-[family-name:var(--font-inter)] text-[13px]" style={{ color: "#B91C1C" }}>
+          Something went wrong. Please try again or email us at{" "}
+          <a href="mailto:info@108rays.com" style={{ textDecoration: "underline" }}>info@108rays.com</a>.
+        </p>
+      )}
+
       {/* Submit */}
       <div className="pt-2">
         <button
           type="submit"
-          disabled={!privacy || selected.length === 0}
+          disabled={!privacy || selected.length === 0 || submitting}
           className="inline-flex items-center gap-2 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] px-8 py-3.5 rounded-full border border-ink/18 text-ink transition-all duration-300 hover:bg-ink hover:text-white hover:border-ink disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-ink disabled:hover:border-ink/18"
         >
-          Submit Application
+          {submitting ? "Sending…" : "Submit Application"}
         </button>
       </div>
     </form>
@@ -273,52 +308,74 @@ function ApplyForm() {
 
 /* ── General Enquiry form ────────────────────────────────────── */
 function EnquiryForm() {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [privacy, setPrivacy] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+
+  useEffect(() => {
+    if (submitted) containerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [submitted]);
 
   if (submitted) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: EXPO }}
-        className="py-20 text-center"
-      >
-        <p
-          className="font-[family-name:var(--font-urbanist)] font-medium text-[22px] tracking-[-0.02em] mb-3"
-          style={{ color: "#09090B" }}
+      <div ref={containerRef} className="scroll-mt-24">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: EXPO }}
+          className="py-20 text-center"
         >
-          Message received.
-        </p>
-        <p
-          className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.75]"
-          style={{ color: "#71717A" }}
-        >
-          We typically respond within 2 to 3 working days.
-        </p>
-      </motion.div>
+          <p
+            className="font-[family-name:var(--font-urbanist)] font-medium text-[22px] tracking-[-0.02em] mb-3"
+            style={{ color: "#09090B" }}
+          >
+            Message received.
+          </p>
+          <p
+            className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.75]"
+            style={{ color: "#71717A" }}
+          >
+            We typically respond within 2 to 3 working days.
+          </p>
+        </motion.div>
+      </div>
     );
   }
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        setSubmitted(true);
+        setSubmitting(true);
+        setSubmitError(false);
+        const data = new FormData(e.currentTarget);
+        try {
+          const res = await fetch("https://formspree.io/f/maqkvwdo", {
+            method: "POST",
+            body: data,
+            headers: { Accept: "application/json" },
+          });
+          if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+        } catch { setSubmitError(true); }
+        setSubmitting(false);
       }}
       className="space-y-8"
     >
+      <input type="hidden" name="_subject" value="General Enquiry – 108 Rays" />
       <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
-        <Field label="Full Name" />
-        <Field label="Email" type="email" />
-        <Field label="Mobile" type="tel" />
-        <Field label="City" />
-        <Field label="Company" />
-        <Field label="Website / LinkedIn" />
+        <Field label="Full Name" name="full_name" />
+        <Field label="Email" type="email" name="email" />
+        <Field label="Mobile" type="tel" name="mobile" />
+        <Field label="City" name="city" />
+        <Field label="Company" name="company" />
+        <Field label="Website / LinkedIn" name="website_linkedin" />
       </div>
       <Field
         label="Tell us briefly about your business and what you're looking for"
         textarea
+        name="message"
       />
 
       <Checkbox
@@ -327,13 +384,20 @@ function EnquiryForm() {
         onChange={() => setPrivacy(!privacy)}
       />
 
+      {submitError && (
+        <p className="font-[family-name:var(--font-inter)] text-[13px]" style={{ color: "#B91C1C" }}>
+          Something went wrong. Please try again or email us at{" "}
+          <a href="mailto:info@108rays.com" style={{ textDecoration: "underline" }}>info@108rays.com</a>.
+        </p>
+      )}
+
       <div className="pt-2">
         <button
           type="submit"
-          disabled={!privacy}
+          disabled={!privacy || submitting}
           className="inline-flex items-center gap-2 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] px-8 py-3.5 rounded-full border border-ink/18 text-ink transition-all duration-300 hover:bg-ink hover:text-white hover:border-ink disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-ink disabled:hover:border-ink/18"
         >
-          Send Enquiry
+          {submitting ? "Sending…" : "Send Enquiry"}
         </button>
       </div>
     </form>
@@ -404,7 +468,7 @@ export default function ContactPage() {
                   animate={{ y: "0%" }}
                   transition={{ duration: 0.95, delay: 0.2, ease: EXPO }}
                   className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.04] tracking-[-0.04em] text-white"
-                  style={{ fontSize: "clamp(52px,7vw,100px)" }}
+                  style={{ fontSize: "clamp(28px,7vw,100px)" }}
                 >
                   Let's talk.
                 </motion.h1>

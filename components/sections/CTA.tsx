@@ -48,7 +48,7 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.9, ease: EXPO, delay: 0.1 }}
             className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.05] tracking-[-0.04em] text-ink mb-6"
-            style={{ fontSize: "clamp(40px,5.8vw,76px)" }}
+            style={{ fontSize: "clamp(14px,5.8vw,76px)" }}
           >
             The right circle<br />changes everything.
           </motion.h2>

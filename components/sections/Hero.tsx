@@ -46,7 +46,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: EXPO }}
           className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.08] tracking-[-0.04em] text-ink mb-4"
-          style={{ fontSize: "clamp(44px,5.8vw,80px)" }}
+          style={{ fontSize: "clamp(14px,5vw,80px)" }}
         >
           A curated ecosystem for
         </motion.h1>
@@ -57,7 +57,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.45, ease: EXPO }}
           className="flex items-center justify-center gap-[0.22em] font-[family-name:var(--font-urbanist)] font-medium tracking-[-0.04em] text-ink mb-10"
-          style={{ fontSize: "clamp(44px,5.8vw,80px)" }}
+          style={{ fontSize: "clamp(14px,5vw,80px)" }}
         >
           {/* Fixed height slot for cycling word — sized by longest word */}
           <span

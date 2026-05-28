@@ -195,7 +195,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
             <div className="clip-line mb-4" style={{ overflow: "hidden" }}>
               <motion.h2
                 className="font-[family-name:var(--font-urbanist)] font-semibold leading-[1.06] tracking-[-0.035em]"
-                style={{ fontSize: "clamp(32px,3.8vw,54px)", color: inkStrong }}
+                style={{ fontSize: "clamp(22px,3.8vw,54px)", color: inkStrong }}
                 initial={{ y: "100%" }}
                 animate={isInView ? { y: "0%" } : {}}
                 transition={{ duration: 0.85, delay: 0.18, ease: EXPO }}
@@ -402,7 +402,7 @@ export default function OfferingsPage() {
               animate={{ y: "0%" }}
               transition={{ duration: 0.95, delay: 0.2, ease: EXPO }}
               className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.06] tracking-[-0.04em] text-white"
-              style={{ fontSize: "clamp(40px,5.5vw,76px)" }}
+              style={{ fontSize: "clamp(14px,5.5vw,76px)" }}
             >
               Three ways to plug in.
             </motion.h1>

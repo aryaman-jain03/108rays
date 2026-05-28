@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -52,10 +52,12 @@ function Field({
   label,
   type = "text",
   textarea = false,
+  name,
 }: {
   label: string;
   type?: string;
   textarea?: boolean;
+  name: string;
 }) {
   const [focused, setFocused] = useState(false);
   const [filled,  setFilled]  = useState(false);
@@ -68,6 +70,7 @@ function Field({
       {textarea ? (
         <textarea
           rows={4}
+          name={name}
           placeholder={label}
           className={`${base} pt-1 leading-[1.7]`}
           style={{ borderColor }}
@@ -78,6 +81,7 @@ function Field({
       ) : (
         <input
           type={type}
+          name={name}
           placeholder={label}
           className={`${base} h-9 pt-1`}
           style={{ borderColor }}
@@ -191,8 +195,14 @@ export default function CompassPage() {
   const pricingRef = useRef<HTMLElement>(null);
   const formRef    = useRef<HTMLElement>(null);
 
-  const [privacy,   setPrivacy]   = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [privacy,     setPrivacy]     = useState(false);
+  const [submitted,   setSubmitted]   = useState(false);
+  const [submitting,  setSubmitting]  = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+
+  useEffect(() => {
+    if (submitted) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [submitted]);
 
   /* Hero parallax */
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -257,13 +267,13 @@ export default function CompassPage() {
           </motion.p>
 
           {/* Headline */}
-          <div className="overflow-hidden mb-7">
+          <div className="overflow-hidden mb-7 w-full">
             <motion.h1
               initial={{ y: "105%" }}
               animate={{ y: "0%" }}
               transition={{ duration: 0.95, delay: 0.2, ease: EXPO }}
               className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.04] tracking-[-0.04em] text-white"
-              style={{ fontSize: "clamp(52px,7vw,100px)" }}
+              style={{ fontSize: "clamp(14px,5.5vw,100px)" }}
             >
               Clarity. Growth. Network.
             </motion.h1>
@@ -740,18 +750,33 @@ export default function CompassPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={formInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.75, delay: 0.3, ease: EXPO }}
-                onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setSubmitting(true);
+                  setSubmitError(false);
+                  const data = new FormData(e.currentTarget);
+                  try {
+                    const res = await fetch("https://formspree.io/f/maqkvwdo", {
+                      method: "POST",
+                      body: data,
+                      headers: { Accept: "application/json" },
+                    });
+                    if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+                  } catch { setSubmitError(true); }
+                  setSubmitting(false);
+                }}
                 className="space-y-8"
               >
+                <input type="hidden" name="_subject" value="New Application – The Compass" />
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
-                  <Field label="Full Name" />
-                  <Field label="Email" type="email" />
-                  <Field label="Mobile" type="tel" />
-                  <Field label="City" />
-                  <Field label="Company" />
-                  <Field label="Website / LinkedIn" />
+                  <Field label="Full Name" name="full_name" />
+                  <Field label="Email" type="email" name="email" />
+                  <Field label="Mobile" type="tel" name="mobile" />
+                  <Field label="City" name="city" />
+                  <Field label="Company" name="company" />
+                  <Field label="Website / LinkedIn" name="website_linkedin" />
                 </div>
-                <Field label="What are you hoping to get from The Compass?" textarea />
+                <Field label="What are you hoping to get from The Compass?" textarea name="message" />
 
                 <Checkbox
                   label="I agree to 108 Rays' Privacy Policy and Terms."
@@ -759,13 +784,20 @@ export default function CompassPage() {
                   onChange={() => setPrivacy(!privacy)}
                 />
 
+                {submitError && (
+                  <p className="font-[family-name:var(--font-inter)] text-[13px]" style={{ color: "#B91C1C" }}>
+                    Something went wrong. Please try again or email us at{" "}
+                    <a href="mailto:info@108rays.com" style={{ textDecoration: "underline" }}>info@108rays.com</a>.
+                  </p>
+                )}
+
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={!privacy}
+                    disabled={!privacy || submitting}
                     className="inline-flex items-center gap-2 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] px-8 py-3.5 rounded-full bg-ink text-white transition-all duration-300 hover:bg-ink/85 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    Continue to Payment
+                    {submitting ? "Sending…" : "Continue to Payment"}
                   </button>
                 </div>
               </motion.form>

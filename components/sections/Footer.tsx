@@ -17,7 +17,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.85, ease: EXPO }}
-          className="grid lg:grid-cols-[1.65fr_1fr] gap-16 pb-14 border-b border-white/06"
+          className="grid lg:grid-cols-[1.65fr_1fr] gap-10 lg:gap-16 pb-14 border-b border-white/06"
         >
           {/* Brand */}
           <div>
@@ -34,7 +34,7 @@ export default function Footer() {
           </div>
 
           {/* Links */}
-          <div className="grid grid-cols-2 gap-10">
+          <div className="grid grid-cols-2 gap-6">
             {[
               { head: "OFFERINGS", links: [
                   { label: "The Compass",      href: "/compass"   },

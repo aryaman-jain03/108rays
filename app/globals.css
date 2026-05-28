@@ -168,6 +168,15 @@ body {
 /* ── Clip for headline line animations ── */
 .clip-line { overflow: hidden; display: block; }
 
+/* ── Mobile heading overflow guard ── */
+@media (max-width: 640px) {
+  h1, h2, h3, h4 {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+}
+
 /* ── Section anchor offset ── */
 section { scroll-margin-top: 80px; }
 

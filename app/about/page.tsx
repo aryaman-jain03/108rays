@@ -157,7 +157,7 @@ export default function AboutPage() {
           style={{ opacity: heroOpacity, y: heroY }}
           className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-10 pt-28 pb-16"
         >
-          <div className="flex flex-col items-center text-center max-w-3xl mx-auto min-h-[70vh] justify-center">
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto min-h-[70vh] justify-center w-full">
 
               {/* Eyebrow */}
               <motion.p
@@ -172,14 +172,14 @@ export default function AboutPage() {
               </motion.p>
 
               {/* Headline — two lines, clip reveal */}
-              <div className="mb-8">
+              <div className="mb-8 w-full">
                 <div className="overflow-hidden">
                   <motion.h1
                     initial={{ y: "105%" }}
                     animate={{ y: "0%" }}
                     transition={{ duration: 0.95, delay: 0.2, ease: EXPO }}
                     className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.04] tracking-[-0.04em] text-white"
-                    style={{ fontSize: "clamp(52px,6.5vw,96px)" }}
+                    style={{ fontSize: "clamp(14px,6vw,96px)" }}
                   >
                     The right circle
                   </motion.h1>
@@ -190,7 +190,7 @@ export default function AboutPage() {
                     animate={{ y: "0%" }}
                     transition={{ duration: 0.95, delay: 0.3, ease: EXPO }}
                     className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.04] tracking-[-0.04em] italic"
-                    style={{ fontSize: "clamp(52px,6.5vw,96px)", color: "rgba(255,255,255,0.55)" }}
+                    style={{ fontSize: "clamp(14px,6vw,96px)", color: "rgba(255,255,255,0.55)" }}
                   >
                     changes everything.
                   </motion.h1>

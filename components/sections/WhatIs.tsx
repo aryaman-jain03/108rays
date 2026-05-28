@@ -116,7 +116,7 @@ export default function WhatIs() {
               </p>
               <h2
                 className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.1] tracking-[-0.035em] text-ink mb-10"
-                style={{ fontSize: "clamp(30px,3.4vw,46px)" }}
+                style={{ fontSize: "clamp(22px,3.4vw,46px)" }}
               >
                 More than a network.<br />A circle that<br />compounds.
               </h2>

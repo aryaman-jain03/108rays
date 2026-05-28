@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   motion,
   useScroll,
@@ -110,7 +110,7 @@ function InsideRow({ item, i }: { item: typeof INSIDE[0]; i: number }) {
 }
 
 /* ── Field ───────────────────────────────────────────────────── */
-function Field({ label, type = "text", textarea = false }: { label: string; type?: string; textarea?: boolean }) {
+function Field({ label, type = "text", textarea = false, name }: { label: string; type?: string; textarea?: boolean; name: string }) {
   const [focused, setFocused] = useState(false);
   const [filled,  setFilled]  = useState(false);
   const base = "w-full bg-transparent border-b font-[family-name:var(--font-inter)] text-[14px] font-normal text-ink outline-none transition-colors duration-300 resize-none placeholder-transparent";
@@ -119,14 +119,14 @@ function Field({ label, type = "text", textarea = false }: { label: string; type
   return (
     <div className="relative pt-5 pb-1">
       {textarea ? (
-        <textarea rows={4} placeholder={label} className={`${base} pt-1 leading-[1.7]`}
+        <textarea rows={4} name={name} placeholder={label} className={`${base} pt-1 leading-[1.7]`}
           style={{ borderColor }}
           onFocus={() => setFocused(true)}
           onBlur={(e) => { setFocused(false); setFilled(e.target.value.length > 0); }}
           onChange={(e) => setFilled(e.target.value.length > 0)}
         />
       ) : (
-        <input type={type} placeholder={label} className={`${base} h-9 pt-1`}
+        <input type={type} name={name} placeholder={label} className={`${base} h-9 pt-1`}
           style={{ borderColor }}
           onFocus={() => setFocused(true)}
           onBlur={(e) => { setFocused(false); setFilled(e.target.value.length > 0); }}
@@ -181,8 +181,14 @@ export default function BoardOfNinePage() {
   const pricingRef = useRef<HTMLElement>(null);
   const formRef    = useRef<HTMLElement>(null);
 
-  const [privacy,   setPrivacy]   = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [privacy,     setPrivacy]     = useState(false);
+  const [submitted,   setSubmitted]   = useState(false);
+  const [submitting,  setSubmitting]  = useState(false);
+  const [submitError, setSubmitError] = useState(false);
+
+  useEffect(() => {
+    if (submitted) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [submitted]);
 
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroOpacity = useTransform(heroScroll, [0, 0.8], [1, 0]);
@@ -275,7 +281,7 @@ export default function BoardOfNinePage() {
                 animate={{ y: "0%" }}
                 transition={{ duration: 1, delay: 0.22, ease: EXPO }}
                 className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.02] tracking-[-0.045em] text-white"
-                style={{ fontSize: "clamp(48px,7.5vw,108px)" }}
+                style={{ fontSize: "clamp(14px,5vw,108px)" }}
               >
                 Your personal board,
               </motion.h1>
@@ -286,7 +292,7 @@ export default function BoardOfNinePage() {
                 animate={{ y: "0%" }}
                 transition={{ duration: 1, delay: 0.34, ease: EXPO }}
                 className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.02] tracking-[-0.045em] italic"
-                style={{ fontSize: "clamp(48px,7.5vw,108px)", color: "rgba(255,255,255,0.4)" }}
+                style={{ fontSize: "clamp(14px,5vw,108px)", color: "rgba(255,255,255,0.4)" }}
               >
                 without giving up equity.
               </motion.h1>
@@ -621,19 +627,34 @@ export default function BoardOfNinePage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={formInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.75, delay: 0.3, ease: EXPO }}
-                onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  setSubmitting(true);
+                  setSubmitError(false);
+                  const data = new FormData(e.currentTarget);
+                  try {
+                    const res = await fetch("https://formspree.io/f/maqkvwdo", {
+                      method: "POST",
+                      body: data,
+                      headers: { Accept: "application/json" },
+                    });
+                    if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+                  } catch { setSubmitError(true); }
+                  setSubmitting(false);
+                }}
                 className="space-y-8"
               >
+                <input type="hidden" name="_subject" value="New Application – Board of Nine" />
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
-                  <Field label="Full Name" />
-                  <Field label="Email" type="email" />
-                  <Field label="Mobile" type="tel" />
-                  <Field label="City" />
-                  <Field label="Company" />
-                  <Field label="Website / LinkedIn" />
+                  <Field label="Full Name" name="full_name" />
+                  <Field label="Email" type="email" name="email" />
+                  <Field label="Mobile" type="tel" name="mobile" />
+                  <Field label="City" name="city" />
+                  <Field label="Company" name="company" />
+                  <Field label="Website / LinkedIn" name="website_linkedin" />
                 </div>
-                <Field label="Biggest business challenge right now" textarea />
-                <Field label="What would you bring to a peer board?" textarea />
+                <Field label="Biggest business challenge right now" textarea name="business_challenge" />
+                <Field label="What would you bring to a peer board?" textarea name="peer_board_contribution" />
 
                 <Checkbox
                   label="I agree to 108 Rays' Privacy Policy and Terms."
@@ -641,13 +662,20 @@ export default function BoardOfNinePage() {
                   onChange={() => setPrivacy(!privacy)}
                 />
 
+                {submitError && (
+                  <p className="font-[family-name:var(--font-inter)] text-[13px]" style={{ color: "#B91C1C" }}>
+                    Something went wrong. Please try again or email us at{" "}
+                    <a href="mailto:info@108rays.com" style={{ textDecoration: "underline" }}>info@108rays.com</a>.
+                  </p>
+                )}
+
                 <div className="pt-2">
                   <button
                     type="submit"
-                    disabled={!privacy}
+                    disabled={!privacy || submitting}
                     className="inline-flex items-center gap-2 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] px-8 py-3.5 rounded-full bg-ink text-white transition-all duration-300 hover:bg-ink/85 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    Submit
+                    {submitting ? "Sending…" : "Submit"}
                   </button>
                 </div>
               </motion.form>

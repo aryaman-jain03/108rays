@@ -360,7 +360,7 @@ export default function FounderCardPage() {
                   animate={{ y: "0%" }}
                   transition={{ duration: 0.95, delay: 0.18, ease: EXPO }}
                   className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.06] tracking-[-0.04em]"
-                  style={{ fontSize: "clamp(40px,5.2vw,72px)", color: "#FAFAFA" }}
+                  style={{ fontSize: "clamp(14px,5.2vw,72px)", color: "#FAFAFA" }}
                 >
                   Perks that travel
                 </motion.h1>
@@ -371,7 +371,7 @@ export default function FounderCardPage() {
                   animate={{ y: "0%" }}
                   transition={{ duration: 0.95, delay: 0.26, ease: EXPO }}
                   className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.06] tracking-[-0.04em] italic"
-                  style={{ fontSize: "clamp(40px,5.2vw,72px)", color: "rgba(212,175,55,0.88)" }}
+                  style={{ fontSize: "clamp(14px,5.2vw,72px)", color: "rgba(212,175,55,0.88)" }}
                 >
                   with you.
                 </motion.h1>
