@@ -239,6 +239,12 @@ export default function SpiritsOfHimalayasPage() {
   const [submitted,    setSubmitted]    = useState(false);
   const [submitting,   setSubmitting]   = useState(false);
   const [submitError,  setSubmitError]  = useState(false);
+  const [planChoice,   setPlanChoice]   = useState<"early-bird" | "standard">("early-bird");
+
+  const PAYMENT_URLS = {
+    "early-bird": "https://rzp.io/rzp/5gzUX5Kw",
+    "standard":   "https://rzp.io/rzp/8wmNHEkN",
+  };
 
   useEffect(() => {
     if (submitted) applyRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -335,10 +341,7 @@ export default function SpiritsOfHimalayasPage() {
             </a>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 1 }} className="mt-16 flex items-center gap-4">
-            <div className="w-px h-10" style={{ background: `linear-gradient(to bottom, ${EM(0.5)}, transparent)`, animation: "scroll-drip 2.4s ease-in-out infinite" }} />
-            <span className="font-[family-name:var(--font-inter)] text-[9px] tracking-[.22em] uppercase" style={{ color: "rgba(255,255,255,0.28)" }}>Scroll</span>
-          </motion.div>
+
         </motion.div>
       </section>
 
@@ -628,7 +631,7 @@ export default function SpiritsOfHimalayasPage() {
             <motion.p initial={{ opacity: 0 }} animate={applyInView ? { opacity: 1 } : {}} transition={{ duration: 0.65, delay: 0.2 }}
               className="font-[family-name:var(--font-inter)] text-[14.5px] leading-[1.76] font-normal max-w-[500px]"
               style={{ color: "rgba(9,9,11,0.42)" }}>
-              This edition is capped at 16–20 founders. Share a few details and we'll get back to you with next steps. No payment at this stage.
+              This edition is capped at 16–20 founders. Select your ticket tier below, fill in a few details, and you&apos;ll be directed to secure payment.
             </motion.p>
           </motion.div>
 
@@ -651,10 +654,46 @@ export default function SpiritsOfHimalayasPage() {
                       body: data,
                       headers: { Accept: "application/json" },
                     });
-                    if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+                    if (res.ok) {
+                      window.location.href = PAYMENT_URLS[planChoice];
+                    } else { setSubmitError(true); }
                   } catch { setSubmitError(true); }
                   setSubmitting(false);
                 }} className="space-y-8">
+                <input type="hidden" name="plan" value={planChoice === "early-bird" ? "Early Bird (₹1,00,000 + GST)" : "Standard (₹1,25,000 + GST)"} />
+
+                {/* Ticket tier selector */}
+                <div>
+                  <p className="font-[family-name:var(--font-inter)] text-[9px] font-medium tracking-[.2em] uppercase mb-4" style={{ color: "rgba(9,9,11,0.35)" }}>
+                    Select Ticket Tier
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {[
+                      { key: "early-bird" as const, label: "Early Bird", price: "₹1,00,000", sub: "+ GST" },
+                      { key: "standard"   as const, label: "Standard",   price: "₹1,25,000", sub: "+ GST" },
+                    ].map(({ key, label, price, sub }) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setPlanChoice(key)}
+                        className="text-left p-4 rounded-xl border transition-all duration-200"
+                        style={{
+                          borderColor: planChoice === key ? "#09090B" : "rgba(9,9,11,0.12)",
+                          background:  planChoice === key ? "rgba(9,9,11,0.04)" : "transparent",
+                        }}
+                      >
+                        <p className="font-[family-name:var(--font-inter)] text-[11px] font-medium tracking-[.08em] uppercase mb-1"
+                          style={{ color: planChoice === key ? "#09090B" : "rgba(9,9,11,0.45)" }}>
+                          {label}
+                        </p>
+                        <p className="font-[family-name:var(--font-urbanist)] font-semibold text-[20px] tracking-[-0.02em] text-ink">
+                          {price} <span className="font-[family-name:var(--font-inter)] text-[11px] font-normal" style={{ color: "rgba(9,9,11,0.38)" }}>{sub}</span>
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
                   <Field label="Full Name" name="full_name" />
                   <Field label="Email" type="email" name="email" />
@@ -703,7 +742,7 @@ export default function SpiritsOfHimalayasPage() {
                 <div className="pt-2">
                   <button type="submit" disabled={!privacy || !drinkingAge || submitting}
                     className="inline-flex items-center gap-2 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] px-8 py-3.5 rounded-full bg-ink text-white transition-all duration-300 hover:bg-ink/85 disabled:opacity-30 disabled:cursor-not-allowed">
-                    {submitting ? "Sending…" : "Submit Application"}
+                    {submitting ? "Sending…" : "Continue to Payment"}
                   </button>
                 </div>
               </motion.form>

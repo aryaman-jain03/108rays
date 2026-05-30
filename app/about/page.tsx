@@ -238,24 +238,7 @@ export default function AboutPage() {
           </div>
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 1 }}
-          className="absolute bottom-10 left-6 lg:left-10 flex flex-col items-center gap-2 z-10"
-        >
-          <div
-            className="w-px h-12 bg-gradient-to-b from-white/35 to-transparent"
-            style={{ animation: "scroll-drip 2.4s ease-in-out infinite" }}
-          />
-          <span
-            className="font-[family-name:var(--font-inter)] text-[8px] tracking-[.25em] text-white/28 uppercase"
-            style={{ writingMode: "vertical-rl" }}
-          >
-            Scroll
-          </span>
-        </motion.div>
+
       </section>
 
       {/* ── Pillars ───────────────────────────────────────────── */}

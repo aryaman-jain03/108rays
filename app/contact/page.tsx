@@ -532,18 +532,7 @@ export default function ContactPage() {
           </div>
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
-          className="absolute bottom-8 left-6 lg:left-10 flex flex-col items-center gap-2 z-10"
-        >
-          <div
-            className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent"
-            style={{ animation: "scroll-drip 2.4s ease-in-out infinite" }}
-          />
-        </motion.div>
+
       </section>
 
       {/* ── Offerings navigation strip ───────────────────────── */}

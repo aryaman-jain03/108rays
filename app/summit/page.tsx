@@ -50,40 +50,68 @@ const DESTINATIONS = [
     featured: true,
     href: "/summit/spirits-of-himalayas",
   },
+];
+
+const INDIA_SUMMITS = [
   {
-    name: "Tuscany, Italy",
+    name: "Udaipur",
     label: "3-Day Summit",
-    dates: "April 2027",
-    activities: ["Wine", "Deep Work", "Long Tables"],
+    dates: "2027",
+    activities: ["Lake Swimming", "Art", "Royal Immersion"],
     status: "Coming Soon",
-    note: "Rolling hills, vineyards, renaissance thinking",
-    img: "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=900&h=700&fit=crop&auto=format",
+    note: "Palaces, shimmering lakes, and the soul of Rajasthan",
+    img: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=900&h=700&fit=crop&auto=format",
     featured: false,
   },
   {
-    name: "Kyoto, Japan",
-    label: "7-Day Summit",
-    dates: "May 2027",
-    activities: ["Zen", "Tea Ceremony", "Strategy"],
+    name: "Havelock Island, Andaman",
+    label: "5-Day Summit",
+    dates: "2027",
+    activities: ["Diving", "Bioluminescence", "Fresh Catch", "Seafood"],
     status: "Coming Soon",
-    note: "Ancient temples, precision mindset, founder focus",
-    img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=900&h=700&fit=crop&auto=format",
+    note: "Radhanagar Beach · Pristine reefs · Zero signal",
+    img: "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=900&h=700&fit=crop&auto=format",
     featured: false,
   },
   {
-    name: "The Maldives",
+    name: "Varkala",
     label: "3-Day Summit",
-    dates: "September 2027",
-    activities: ["Diving", "Wellness", "Deep Work", "Sunsets"],
+    dates: "2027",
+    activities: ["Surfing", "Jungle Kayaking", "Sunsets"],
     status: "Coming Soon",
-    note: "Overwater villas, coral reefs, zero distractions",
-    img: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=900&h=700&fit=crop&auto=format",
+    note: "Cliff-top views, Kerala backwaters, and golden hours",
+    img: "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=900&h=700&fit=crop&auto=format",
+    featured: false,
+  },
+  {
+    name: "Ananda in the Himalayas",
+    label: "4-Day Summit",
+    dates: "2027",
+    activities: ["Golf", "Wellness", "Mountain Vibes", "Clarity"],
+    status: "Coming Soon",
+    note: "Uttarakhand · Luxury wellness · Himalayan altitude",
+    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=900&h=700&fit=crop&auto=format",
+    featured: false,
+  },
+  {
+    name: "Meghalaya",
+    label: "4-Day Summit",
+    dates: "2027",
+    activities: ["Caves", "Tribes", "Culinary Delights", "Music"],
+    status: "Coming Soon",
+    note: "Living roots, monsoon forests, and ancient cultures",
+    img: "https://images.unsplash.com/photo-1542401886-65d6c61db217?w=900&h=700&fit=crop&auto=format",
     featured: false,
   },
 ];
 
+type DestinationItem = {
+  name: string; label: string; dates: string; activities: string[];
+  status: string; note: string; img: string; featured: boolean; href?: string;
+};
+
 /* ── Destination card — own inView ───────────────────────────── */
-function DestCard({ d, i, aspect = "4/3" }: { d: typeof DESTINATIONS[0]; i: number; aspect?: string }) {
+function DestCard({ d, i, aspect = "4/3" }: { d: DestinationItem; i: number; aspect?: string }) {
   const ref    = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.25 });
   const card = (
@@ -458,24 +486,7 @@ export default function SummitPage() {
             </div>
           </div>
 
-          {/* Scroll cue */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.1, duration: 1 }}
-            className="mt-16 flex items-center gap-4"
-          >
-            <div className="w-px h-10"
-              style={{
-                background: "linear-gradient(to bottom, rgba(255,255,255,0.3), transparent)",
-                animation: "scroll-drip 2.4s ease-in-out infinite",
-              }}
-            />
-            <span className="font-[family-name:var(--font-inter)] text-[9px] tracking-[.22em] uppercase"
-              style={{ color: "rgba(255,255,255,0.3)" }}>
-              Scroll
-            </span>
-          </motion.div>
+
         </motion.div>
       </section>
 
@@ -753,21 +764,21 @@ export default function SummitPage() {
             </motion.p>
           </div>
 
-          {/* Cards — featured large + 3 equal */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {/* Featured card — spans 2 cols */}
-            <div className="lg:col-span-2">
-              <DestCard d={DESTINATIONS[0]} i={0} />
-            </div>
-            {/* Right column — 2 stacked */}
-            <div className="flex flex-col gap-4">
-              <DestCard d={DESTINATIONS[1]} i={1} />
-              <DestCard d={DESTINATIONS[2]} i={2} />
-            </div>
-            {/* Bottom full-width card */}
-            <div className="sm:col-span-2 lg:col-span-3">
-              <DestCard d={DESTINATIONS[3]} i={3} aspect="16/5" />
-            </div>
+          {/* Spirits — full-width featured */}
+          <div className="mb-4">
+            <DestCard d={DESTINATIONS[0]} i={0} aspect="21/7" />
+          </div>
+
+          {/* India coming soon — 3 + 2 */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+            {INDIA_SUMMITS.slice(0, 3).map((d, i) => (
+              <DestCard key={d.name} d={d} i={i + 1} />
+            ))}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:w-2/3 mx-auto">
+            {INDIA_SUMMITS.slice(3).map((d, i) => (
+              <DestCard key={d.name} d={d} i={i + 4} />
+            ))}
           </div>
 
           {/* Footer note */}

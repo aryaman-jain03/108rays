@@ -104,7 +104,9 @@ function LiquidButton({
   const [hovered, setHovered] = React.useState(false)
   const [pressed, setPressed] = React.useState(false)
 
-  const isDark = tint && tint.includes("0.92")
+  // Dark = low RGB values (near black); Light = high RGB values (near white)
+  const isDark  = tint ? /rgba\(\s*([0-9]+)/.test(tint) && parseInt(tint.match(/rgba\(\s*([0-9]+)/)![1]) < 50 : false;
+  const isWhite = tint ? /rgba\(\s*([0-9]+)/.test(tint) && parseInt(tint.match(/rgba\(\s*([0-9]+)/)![1]) > 200 : false;
   const ease = "cubic-bezier(0.25, 0.46, 0.45, 0.94)"
 
   const wrapperStyle: React.CSSProperties = {
@@ -123,10 +125,14 @@ function LiquidButton({
       : hovered
         ? isDark
           ? "inset 0 1px 1px rgba(255,255,255,0.18), 0 20px 50px rgba(0,0,0,0.42), 0 8px 20px rgba(0,0,0,0.26)"
-          : "inset 0 1px 1px rgba(255,255,255,0.72), 0 20px 50px rgba(0,0,0,0.11), 0 8px 20px rgba(0,0,0,0.07)"
+          : isWhite
+            ? "inset 0 1px 1px rgba(255,255,255,0.80), 0 20px 50px rgba(255,255,255,0.38), 0 8px 20px rgba(255,255,255,0.22)"
+            : "inset 0 1px 1px rgba(255,255,255,0.72), 0 20px 50px rgba(0,0,0,0.11), 0 8px 20px rgba(0,0,0,0.07)"
         : isDark
           ? "inset 0 1px 1px rgba(255,255,255,0.14), 0 4px 14px rgba(0,0,0,0.28), 0 2px 6px rgba(0,0,0,0.18)"
-          : "inset 0 1px 1px rgba(255,255,255,0.65), 0 2px 8px rgba(0,0,0,0.07)",
+          : isWhite
+            ? "inset 0 1px 1px rgba(255,255,255,0.70), 0 4px 18px rgba(255,255,255,0.30), 0 2px 8px rgba(255,255,255,0.18)"
+            : "inset 0 1px 1px rgba(255,255,255,0.65), 0 2px 8px rgba(0,0,0,0.07)",
     transition: `box-shadow 320ms ${ease}`,
   }
 
@@ -177,7 +183,9 @@ function LiquidButton({
         style={{
           background: isDark
             ? "rgba(255,255,255,0.22)"
-            : "rgba(255,255,255,0.90)",
+            : isWhite
+              ? "rgba(255,255,255,0.30)"
+              : "rgba(255,255,255,0.90)",
         }}
       />
 

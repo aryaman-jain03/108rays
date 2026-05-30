@@ -199,6 +199,12 @@ export default function CompassPage() {
   const [submitted,   setSubmitted]   = useState(false);
   const [submitting,  setSubmitting]  = useState(false);
   const [submitError, setSubmitError] = useState(false);
+  const [planChoice,  setPlanChoice]  = useState<"quarterly" | "single">("quarterly");
+
+  const PAYMENT_URLS = {
+    quarterly: "https://rzp.io/rzp/4WmmHOq",
+    single:    "https://rzp.io/rzp/xOqhash",
+  };
 
   useEffect(() => {
     if (submitted) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -291,22 +297,7 @@ export default function CompassPage() {
             high-signal networking.
           </motion.p>
 
-          {/* Scroll to explore */}
-          <motion.a
-            href="#inside"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9, duration: 0.8 }}
-            className="flex flex-col items-center gap-3 group"
-          >
-            <span className="font-[family-name:var(--font-inter)] text-[9px] tracking-[.24em] text-white/28 uppercase group-hover:text-white/50 transition-colors duration-300">
-              Explore
-            </span>
-            <div
-              className="w-px h-10 bg-gradient-to-b from-white/30 to-transparent"
-              style={{ animation: "scroll-drip 2.4s ease-in-out infinite" }}
-            />
-          </motion.a>
+
         </motion.div>
       </section>
 
@@ -422,11 +413,11 @@ export default function CompassPage() {
                 >
                   <span className="font-[family-name:var(--font-urbanist)] font-semibold leading-none text-white"
                     style={{ fontSize: "clamp(36px,4vw,52px)" }}>
-                    ₹7,499
+                    ₹22,497
                   </span>
                   <span className="font-[family-name:var(--font-inter)] text-[12.5px] font-normal"
                     style={{ color: "rgba(255,255,255,0.32)" }}>
-                    /month, billed quarterly
+                    /quarter + GST
                   </span>
                 </motion.div>
               </div>
@@ -471,8 +462,9 @@ export default function CompassPage() {
                 initial={{ opacity: 0 }}
                 animate={pricingInView ? { opacity: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.5 }}
+
               >
-                /single session
+                /single session + GST
               </motion.p>
             </motion.div>
           </div>
@@ -761,13 +753,49 @@ export default function CompassPage() {
                       body: data,
                       headers: { Accept: "application/json" },
                     });
-                    if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+                    if (res.ok) {
+                      window.location.href = PAYMENT_URLS[planChoice];
+                    } else { setSubmitError(true); }
                   } catch { setSubmitError(true); }
                   setSubmitting(false);
                 }}
                 className="space-y-8"
               >
                 <input type="hidden" name="_subject" value="New Application – The Compass" />
+                <input type="hidden" name="plan" value={planChoice === "quarterly" ? "Quarterly Membership (₹22,497 + GST)" : "Single Session (₹9,999 + GST)"} />
+
+                {/* Plan selector */}
+                <div>
+                  <p className="font-[family-name:var(--font-inter)] text-[9px] font-medium tracking-[.2em] uppercase mb-4" style={{ color: "rgba(9,9,11,0.35)" }}>
+                    Select Your Plan
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {[
+                      { key: "quarterly" as const, label: "Quarterly Membership", price: "₹22,497", sub: "/quarter + GST" },
+                      { key: "single"    as const, label: "Single Session",       price: "₹9,999",  sub: "/session + GST" },
+                    ].map(({ key, label, price, sub }) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setPlanChoice(key)}
+                        className="text-left p-4 rounded-xl border transition-all duration-200"
+                        style={{
+                          borderColor: planChoice === key ? "#09090B" : "rgba(9,9,11,0.12)",
+                          background:  planChoice === key ? "rgba(9,9,11,0.04)" : "transparent",
+                        }}
+                      >
+                        <p className="font-[family-name:var(--font-inter)] text-[11px] font-medium tracking-[.08em] uppercase mb-1"
+                          style={{ color: planChoice === key ? "#09090B" : "rgba(9,9,11,0.45)" }}>
+                          {label}
+                        </p>
+                        <p className="font-[family-name:var(--font-urbanist)] font-semibold text-[20px] tracking-[-0.02em] text-ink">
+                          {price} <span className="font-[family-name:var(--font-inter)] text-[11px] font-normal" style={{ color: "rgba(9,9,11,0.38)" }}>{sub}</span>
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
                   <Field label="Full Name" name="full_name" />
                   <Field label="Email" type="email" name="email" />

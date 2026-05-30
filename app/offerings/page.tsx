@@ -28,7 +28,7 @@ const offerings = [
     ctaDark: true,
     img: "https://images.unsplash.com/photo-1517842645767-c639042777db?w=1000&h=800&fit=crop&auto=format",
     dark: false,
-    glow: "rgba(245,158,11,0.13)",
+    glow: "transparent",
     flip: false,
   },
   {
@@ -43,7 +43,7 @@ const offerings = [
     ctaDark: false,
     img: "https://images.unsplash.com/photo-1515169067868-5387ec356754?w=1000&h=800&fit=crop&auto=format",
     dark: true,
-    glow: "rgba(99,102,241,0.18)",
+    glow: "transparent",
     flip: true,
   },
   {
@@ -58,7 +58,7 @@ const offerings = [
     ctaDark: true,
     img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1000&h=800&fit=crop&auto=format",
     dark: false,
-    glow: "rgba(16,185,129,0.12)",
+    glow: "transparent",
     flip: false,
   },
 ];
@@ -112,7 +112,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden"
+      className="relative overflow-hidden h-screen flex items-center"
       style={{ backgroundColor: o.dark ? "#09090B" : "#FAFAFA" }}
     >
       {/* Ambient glow */}
@@ -138,8 +138,8 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-28">
-        <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${o.flip ? "lg:[&>*:first-child]:order-last" : ""}`}>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 py-0 w-full">
+        <div className={`grid lg:grid-cols-2 gap-8 lg:gap-14 items-center ${o.flip ? "lg:[&>*:first-child]:order-last" : ""}`}>
 
           {/* ── Text ── */}
           <motion.div
@@ -150,7 +150,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
           >
             {/* Category row */}
             <motion.div
-              className="flex items-center gap-4 mb-7 overflow-hidden"
+              className="flex items-center gap-4 mb-4 overflow-hidden"
               initial={{ opacity: 0, y: 16 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={stagger(0.08)}
@@ -172,7 +172,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
 
             {/* Icon */}
             <motion.div
-              className="mb-7"
+              className="mb-4"
               initial={{ opacity: 0, scale: 0.7 }}
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.55, delay: 0.15, ease: EXPO }}
@@ -192,7 +192,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
             </motion.div>
 
             {/* Title — clip reveal */}
-            <div className="clip-line mb-4" style={{ overflow: "hidden" }}>
+            <div className="clip-line mb-2" style={{ overflow: "hidden" }}>
               <motion.h2
                 className="font-[family-name:var(--font-urbanist)] font-semibold leading-[1.06] tracking-[-0.035em]"
                 style={{ fontSize: "clamp(22px,3.8vw,54px)", color: inkStrong }}
@@ -205,7 +205,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
             </div>
 
             {/* Tagline — clip reveal */}
-            <div style={{ overflow: "hidden" }} className="mb-5">
+            <div style={{ overflow: "hidden" }} className="mb-3">
               <motion.p
                 className="font-[family-name:var(--font-urbanist)] font-medium text-[18px] leading-snug tracking-[-0.01em]"
                 style={{ color: o.dark ? "rgba(255,255,255,0.65)" : "rgba(9,9,11,0.62)" }}
@@ -219,7 +219,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
 
             {/* Divider line — draw */}
             <motion.div
-              className="mb-6"
+              className="mb-3"
               initial={{ width: 0 }}
               animate={isInView ? { width: 40 } : {}}
               transition={{ duration: 0.6, delay: 0.36, ease: EXPO }}
@@ -228,11 +228,12 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
 
             {/* Description */}
             <motion.p
-              className="font-[family-name:var(--font-inter)] text-[15px] leading-[1.78] font-normal mb-10 max-w-[420px]"
+              className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.7] font-normal mb-6 max-w-[420px]"
               style={{ color: inkMed }}
               initial={{ opacity: 0, y: 14 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={stagger(0.42)}
+              className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.7] font-normal mb-6 max-w-[420px]"
             >
               {o.desc}
             </motion.p>
@@ -243,26 +244,17 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={stagger(0.52)}
             >
-              {o.dark ? (
-                <a
-                  href={o.ctaHref}
-                  className="inline-flex items-center gap-2 h-12 px-8 rounded-full border border-white/25 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] text-white hover:bg-white/10 hover:border-white/45 transition-all duration-300 whitespace-nowrap"
+              <a href={o.ctaHref}>
+                <LiquidButton
+                  size="xl"
+                  tint={o.dark ? "rgba(250,250,250,0.92)" : "rgba(9,9,11,0.92)"}
+                  className={`font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] whitespace-nowrap ${o.dark ? "text-ink" : "text-white"}`}
                 >
-                  {o.cta} <ArrowRight size={14} />
-                </a>
-              ) : (
-                <a href={o.ctaHref}>
-                  <LiquidButton
-                    size="xl"
-                    tint="rgba(9,9,11,0.92)"
-                    className="font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] text-white whitespace-nowrap"
-                  >
-                    <span className="flex items-center gap-2 whitespace-nowrap">
-                      {o.cta} <ArrowRight size={14} />
-                    </span>
-                  </LiquidButton>
-                </a>
-              )}
+                  <span className="flex items-center gap-2 whitespace-nowrap">
+                    {o.cta} <ArrowRight size={14} />
+                  </span>
+                </LiquidButton>
+              </a>
             </motion.div>
           </motion.div>
 
@@ -283,7 +275,7 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
                   : "0 32px 80px rgba(9,9,11,0.14), 0 8px 24px rgba(9,9,11,0.08)",
               }}
             >
-              <div className="h-[420px] lg:h-[500px] overflow-hidden">
+              <div className="h-[32vh] lg:h-[48vh] overflow-hidden">
                 <motion.img
                   src={o.img}
                   alt={o.title}
@@ -311,27 +303,6 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
               </div>
             </div>
 
-            {/* Floating chip */}
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.55, ease: EXPO }}
-              className="absolute -bottom-5 left-6 flex items-center gap-2.5 px-4 py-2.5 rounded-full"
-              style={{
-                background: o.dark ? "rgba(255,255,255,0.06)" : "#ffffff",
-                border: o.dark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(9,9,11,0.08)",
-                backdropFilter: "blur(12px)",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
-              }}
-            >
-              <Icon size={13} style={{ color: o.dark ? "rgba(255,255,255,0.7)" : "#09090B" }} strokeWidth={1.8} />
-              <span
-                className="font-[family-name:var(--font-inter)] text-[11px] font-medium tracking-[.08em]"
-                style={{ color: o.dark ? "rgba(255,255,255,0.65)" : "#09090B" }}
-              >
-                {o.title}
-              </span>
-            </motion.div>
           </motion.div>
 
         </div>
@@ -367,7 +338,7 @@ export default function OfferingsPage() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative bg-ink-2 overflow-hidden flex items-center min-h-[52vh] pt-24 pb-16"
+        className="relative bg-ink-2 overflow-hidden flex items-center h-screen"
       >
         <div className="absolute inset-0 grid-bg-dark opacity-60 pointer-events-none" />
         <div

@@ -56,16 +56,16 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.45, ease: EXPO }}
-          className="flex items-center justify-center gap-[0.22em] font-[family-name:var(--font-urbanist)] font-medium tracking-[-0.04em] text-ink mb-10"
+          className="flex items-center justify-center gap-[0.25em] font-[family-name:var(--font-urbanist)] font-medium tracking-[-0.04em] text-ink mb-10"
           style={{ fontSize: "clamp(14px,5vw,80px)" }}
         >
           {/* Fixed height slot for cycling word — sized by longest word */}
           <span
             className="relative inline-block"
-            style={{ height: "1.5em", verticalAlign: "middle", paddingRight: "1em", clipPath: "inset(0 -0.5em)" }}
+            style={{ height: "1.5em", verticalAlign: "middle", paddingRight: "0.6em", clipPath: "inset(0 -3em)" }}
           >
             {/* Invisible anchor that holds the width of the longest word */}
-            <span aria-hidden className="invisible whitespace-nowrap" style={{ lineHeight: "1.5em" }}>relentless</span>
+            <span aria-hidden className="invisible whitespace-nowrap italic font-semibold" style={{ lineHeight: "1.5em" }}>visionary</span>
             {CYCLING_WORDS.map((word, i) => (
               <motion.span
                 key={word}
@@ -74,7 +74,7 @@ export default function Hero() {
                 animate={
                   wordIdx === i
                     ? { y: "0%", opacity: 1 }
-                    : { y: wordIdx > i ? "-150%" : "150%", opacity: 0 }
+                    : { y: "-150%", opacity: 0 }
                 }
                 transition={{ type: "spring", stiffness: 52, damping: 18 }}
               >
@@ -129,27 +129,13 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1  }}
           transition={{ duration: 0.8, delay: 1.35 }}
-          className="font-[family-name:var(--font-inter)] text-[10px] font-normal tracking-[.28em] text-ink/22 uppercase"
+          className="font-[family-name:var(--font-inter)] text-[10px] font-normal tracking-[.28em] text-ink/22 uppercase whitespace-nowrap"
         >
           Built for founders. Designed for visionaries
         </motion.p>
       </div>
 
-      {/* Scroll cue */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1  }}
-        transition={{ delay: 1.6, duration: 1 }}
-        className="absolute bottom-10 left-6 lg:left-10 flex flex-col items-center gap-2 z-10"
-      >
-        <div
-          className="w-px h-12 bg-gradient-to-b from-ink/40 to-transparent"
-          style={{ animation: "scroll-drip 2.4s ease-in-out infinite" }}
-        />
-        <span className="font-[family-name:var(--font-inter)] text-[8px] tracking-[.25em] text-ink/35 [writing-mode:vertical-rl] uppercase">
-          Scroll
-        </span>
-      </motion.div>
+
     </section>
   );
 }

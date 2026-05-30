@@ -8,27 +8,33 @@ const EXPO: [number, number, number, number] = [0.19, 1, 0.22, 1];
 const offerings = [
   {
     num: "01", Icon: Compass,
-    title: "The Compass",
-    desc:  "Growth sessions and curated learning formats that give founders clarity, direction, and momentum.",
-    img:   "https://images.unsplash.com/photo-1517842645767-c639042777db?w=600&h=280&fit=crop&auto=format",
-    cta:   "Join Now",
-    href:  "/compass",
+    title:    "The Compass",
+    sublabel: "Growth & Network Sessions",
+    oneliner: "Clarity. Growth. Network.",
+    desc:     "Monthly masterclasses and curated connections for ambitious founders.",
+    img:      "https://images.unsplash.com/photo-1517842645767-c639042777db?w=600&h=280&fit=crop&auto=format",
+    cta:      "Join Now",
+    href:     "/compass",
   },
   {
     num: "02", Icon: Users,
-    title: "The Board of Nine",
-    desc:  "Intimate peer advisory boards of 9 founders. Structured, recurring, deep.",
-    img:   "https://images.unsplash.com/photo-1515169067868-5387ec356754?w=600&h=280&fit=crop&auto=format",
-    cta:   "Apply Now",
-    href:  "/board-of-nine",
+    title:    "The Board of Nine",
+    sublabel: "Peer Advisory for Growth",
+    oneliner: "Your personal board, without giving up equity.",
+    desc:     "Monthly peer advisory boards of nine founders for deep problem-solving and accountability.",
+    img:      "https://images.unsplash.com/photo-1515169067868-5387ec356754?w=600&h=280&fit=crop&auto=format",
+    cta:      "Apply",
+    href:     "/board-of-nine",
   },
   {
     num: "03", Icon: Mountain,
-    title: "The Summit",
-    desc:  "Curated founder retreats and experiences designed for breakthrough moments.",
-    img:   "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=280&fit=crop&auto=format",
-    cta:   "Apply Now",
-    href:  "/summit",
+    title:    "The Summit",
+    sublabel: "Curated Founder Experiences",
+    oneliner: "Three to seven days. One breakthrough.",
+    desc:     "Immersive retreats that blend curated founder experiences, deep war rooms, and wellness.",
+    img:      "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=280&fit=crop&auto=format",
+    cta:      "Apply",
+    href:     "/summit",
   },
 ];
 
@@ -123,9 +129,15 @@ export default function Offerings() {
               </div>
             </div>
 
+            <p className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.18em] text-accent/55 uppercase mb-1">
+              {o.sublabel}
+            </p>
             <h3 className="font-[family-name:var(--font-urbanist)] text-[20px] font-semibold text-ink leading-snug tracking-[-0.02em] mb-2">
               {o.title}
             </h3>
+            <p className="font-[family-name:var(--font-urbanist)] text-[13.5px] font-medium text-ink/70 tracking-[-0.01em] mb-3 italic">
+              {o.oneliner}
+            </p>
             <p className="font-[family-name:var(--font-inter)] text-[13px] leading-[1.72] text-ink/50 font-normal mb-6">
               {o.desc}
             </p>
@@ -146,8 +158,8 @@ export default function Offerings() {
   );
 
   return (
-    <section id="offerings" className="relative bg-surface overflow-hidden">
-      <div className="absolute right-[-18%] top-1/2 -translate-y-1/2 w-[660px] h-[660px] rounded-full border border-accent/04 pointer-events-none"
+    <section id="offerings" className="relative bg-surface">
+      <div className="absolute right-[-18%] top-[55%] -translate-y-1/2 w-[660px] h-[660px] rounded-full border border-accent/04 pointer-events-none"
            style={{ animation: "spin-cw 100s linear infinite" }} />
       <ContainerScroll titleComponent={title}>
         {cards}

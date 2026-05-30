@@ -185,6 +185,12 @@ export default function BoardOfNinePage() {
   const [submitted,   setSubmitted]   = useState(false);
   const [submitting,  setSubmitting]  = useState(false);
   const [submitError, setSubmitError] = useState(false);
+  const [planChoice,  setPlanChoice]  = useState<"monthly" | "annual">("monthly");
+
+  const PAYMENT_URLS = {
+    monthly: "https://rzp.io/rzp/9HpU3byD",
+    annual:  "https://rzp.io/rzp/ZHHBRaA",
+  };
 
   useEffect(() => {
     if (submitted) formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -317,20 +323,7 @@ export default function BoardOfNinePage() {
             </p>
           </motion.div>
 
-          {/* Scroll cue */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 1 }}
-            className="mt-20 flex items-center gap-4"
-          >
-            <div className="w-px h-10 bg-gradient-to-b from-white/20 to-transparent"
-              style={{ animation: "scroll-drip 2.4s ease-in-out infinite" }}
-            />
-            <span className="font-[family-name:var(--font-inter)] text-[9px] tracking-[.22em] text-white/20 uppercase">
-              Scroll
-            </span>
-          </motion.div>
+
         </motion.div>
       </section>
 
@@ -561,7 +554,8 @@ export default function BoardOfNinePage() {
               style={{ color: "rgba(9,9,11,0.42)" }}
             >
               Each board is intentionally small. We curate for fit, intent, and
-              complementary perspectives. No payment at this stage.
+              complementary perspectives. After submitting, you&apos;ll be directed to
+              secure payment via our gateway.
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 8 }}
@@ -638,13 +632,49 @@ export default function BoardOfNinePage() {
                       body: data,
                       headers: { Accept: "application/json" },
                     });
-                    if (res.ok) { setSubmitted(true); } else { setSubmitError(true); }
+                    if (res.ok) {
+                      window.location.href = PAYMENT_URLS[planChoice];
+                    } else { setSubmitError(true); }
                   } catch { setSubmitError(true); }
                   setSubmitting(false);
                 }}
                 className="space-y-8"
               >
                 <input type="hidden" name="_subject" value="New Application – Board of Nine" />
+                <input type="hidden" name="plan" value={planChoice === "monthly" ? "Monthly (₹22,000 + GST/month)" : "Annual (₹2,40,000 + GST)"} />
+
+                {/* Plan selector */}
+                <div>
+                  <p className="font-[family-name:var(--font-inter)] text-[9px] font-medium tracking-[.2em] uppercase mb-4" style={{ color: "rgba(9,9,11,0.35)" }}>
+                    Select Your Plan
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {[
+                      { key: "monthly" as const, label: "Monthly",  price: "₹22,000", sub: "/month + GST" },
+                      { key: "annual"  as const, label: "Annual",   price: "₹2,40,000", sub: "/year + GST" },
+                    ].map(({ key, label, price, sub }) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setPlanChoice(key)}
+                        className="text-left p-4 rounded-xl border transition-all duration-200"
+                        style={{
+                          borderColor: planChoice === key ? "#09090B" : "rgba(9,9,11,0.12)",
+                          background:  planChoice === key ? "rgba(9,9,11,0.04)" : "transparent",
+                        }}
+                      >
+                        <p className="font-[family-name:var(--font-inter)] text-[11px] font-medium tracking-[.08em] uppercase mb-1"
+                          style={{ color: planChoice === key ? "#09090B" : "rgba(9,9,11,0.45)" }}>
+                          {label}
+                        </p>
+                        <p className="font-[family-name:var(--font-urbanist)] font-semibold text-[20px] tracking-[-0.02em] text-ink">
+                          {price} <span className="font-[family-name:var(--font-inter)] text-[11px] font-normal" style={{ color: "rgba(9,9,11,0.38)" }}>{sub}</span>
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid sm:grid-cols-2 gap-x-10 gap-y-2">
                   <Field label="Full Name" name="full_name" />
                   <Field label="Email" type="email" name="email" />
@@ -675,7 +705,7 @@ export default function BoardOfNinePage() {
                     disabled={!privacy || submitting}
                     className="inline-flex items-center gap-2 font-[family-name:var(--font-urbanist)] font-semibold tracking-[.12em] uppercase text-[11px] px-8 py-3.5 rounded-full bg-ink text-white transition-all duration-300 hover:bg-ink/85 disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    {submitting ? "Sending…" : "Submit"}
+                    {submitting ? "Sending…" : "Continue to Payment"}
                   </button>
                 </div>
               </motion.form>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   motion,
   useScroll,
@@ -85,12 +85,22 @@ function FounderCardVisual({ large = false }: { large?: boolean }) {
   const rotateY  = useSpring(0, { stiffness: 180, damping: 26 });
   const [glow,   setGlow]    = useState({ x: 62, y: 40 });
   const [active, setActive]  = useState(false);
+  const [vw,     setVw]      = useState(typeof window !== "undefined" ? window.innerWidth : 1280);
 
-  const W = large ? 520 : 420;
-  const H = large ? 328 : 265;
-  const OX = large ? 335 : 270;   // ray origin X
-  const OY = large ? 128 : 102;   // ray origin Y
-  const scale = large ? W / 420 : 1;
+  useEffect(() => {
+    const update = () => setVw(window.innerWidth);
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, []);
+
+  const base  = large ? 520 : 420;
+  const maxW  = vw < 1024 ? Math.min(vw - 48, base) : base;
+  const ratio = maxW / base;
+  const W     = maxW;
+  const H     = Math.round((large ? 328 : 265) * ratio);
+  const OX    = Math.round((large ? 335 : 270) * ratio);
+  const OY    = Math.round((large ? 128 : 102) * ratio);
+  const scale = ratio;
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -107,7 +117,7 @@ function FounderCardVisual({ large = false }: { large?: boolean }) {
     setActive(false);
   };
 
-  const fontSize = large ? 20 : 17;
+  const fontSize = Math.round((large ? 20 : 17) * ratio);
 
   return (
     <div style={{ perspective: "1400px" }}>
@@ -192,7 +202,7 @@ function FounderCardVisual({ large = false }: { large?: boolean }) {
             style={{ bottom: large ? 40 : 30, left: large ? 36 : 28 }}
           >
             <span
-              className="font-[family-name:var(--font-urbanist)] font-light"
+              className="font-[family-name:var(--font-montserrat)] font-light"
               style={{
                 fontSize, letterSpacing: "0.30em",
                 color: "rgba(212,175,55,0.92)",
@@ -397,7 +407,7 @@ export default function FounderCardPage() {
                 className="flex flex-wrap gap-3"
               >
                 <a
-                  href="/compass#register"
+                  href="/contact"
                   className="inline-flex items-center gap-2 h-12 px-7 rounded-full font-[family-name:var(--font-urbanist)] font-semibold tracking-[.10em] uppercase text-[11px] whitespace-nowrap transition-all duration-300"
                   style={{
                     background: "rgba(212,175,55,0.9)",
@@ -407,7 +417,7 @@ export default function FounderCardPage() {
                   onMouseEnter={e => (e.currentTarget.style.background = "rgba(212,175,55,1)")}
                   onMouseLeave={e => (e.currentTarget.style.background = "rgba(212,175,55,0.9)")}
                 >
-                  Join Compass to Get Yours <ArrowRight size={13} />
+                  Join to Get Yours <ArrowRight size={13} />
                 </a>
                 <a
                   href="/offerings"
@@ -433,27 +443,7 @@ export default function FounderCardPage() {
           </div>
         </motion.div>
 
-        {/* Scroll cue */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 1 }}
-          className="absolute bottom-10 left-6 lg:left-10 flex flex-col items-center gap-2 z-10"
-        >
-          <div
-            className="w-px h-12"
-            style={{
-              background: "linear-gradient(to bottom, rgba(212,175,55,0.5), transparent)",
-              animation: "scroll-drip 2.4s ease-in-out infinite",
-            }}
-          />
-          <span
-            className="font-[family-name:var(--font-inter)] text-[8px] tracking-[.25em] uppercase"
-            style={{ color: "rgba(212,175,55,0.35)", writingMode: "vertical-rl" }}
-          >
-            Scroll
-          </span>
-        </motion.div>
+
       </section>
 
       {/* ── Perks grid ───────────────────────────────────────── */}
