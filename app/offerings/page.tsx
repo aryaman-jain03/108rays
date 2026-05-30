@@ -233,7 +233,6 @@ function OfferingRow({ o, i }: { o: Offering; i: number }) {
               initial={{ opacity: 0, y: 14 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={stagger(0.42)}
-              className="font-[family-name:var(--font-inter)] text-[14px] leading-[1.7] font-normal mb-6 max-w-[420px]"
             >
               {o.desc}
             </motion.p>

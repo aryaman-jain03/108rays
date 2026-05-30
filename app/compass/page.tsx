@@ -305,7 +305,7 @@ export default function CompassPage() {
       <section
         id="inside"
         ref={insideRef}
-        className="relative bg-surface overflow-hidden py-24 lg:py-32"
+        className="relative bg-surface overflow-hidden min-h-screen flex items-center"
       >
         {/* Dark→light top blend */}
         <div className="absolute top-0 inset-x-0 h-20 pointer-events-none z-10"
@@ -321,9 +321,9 @@ export default function CompassPage() {
           }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label + expanding line */}
-          <div className="flex items-center gap-4 mb-16 overflow-hidden">
+          <div className="flex items-center gap-4 mb-8 overflow-hidden">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(9,9,11,0.42)" }}
@@ -353,7 +353,7 @@ export default function CompassPage() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────────── */}
-      <section ref={pricingRef} className="relative bg-ink-2 overflow-hidden py-24 lg:py-32">
+      <section ref={pricingRef} className="relative bg-ink-2 overflow-hidden min-h-screen flex items-center">
         <div className="absolute inset-0 grid-bg-dark opacity-40 pointer-events-none" />
 
         {/* Ambient glow centre */}
@@ -361,9 +361,9 @@ export default function CompassPage() {
           style={{ background: "radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255,255,255,0.02) 0%, transparent 70%)" }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label */}
-          <div className="flex items-center gap-4 mb-16">
+          <div className="flex items-center gap-4 mb-8">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(255,255,255,0.4)" }}
@@ -471,7 +471,7 @@ export default function CompassPage() {
 
           {/* Who It's For */}
           <motion.div
-            className="mt-16 pt-12 border-t"
+            className="mt-8 pt-8 border-t"
             style={{ borderColor: "rgba(255,255,255,0.07)" }}
             initial={{ opacity: 0, y: 20 }}
             animate={pricingInView ? { opacity: 1, y: 0 } : {}}
@@ -491,13 +491,13 @@ export default function CompassPage() {
       </section>
 
       {/* ── Upcoming Meetings ────────────────────────────────── */}
-      <section className="relative bg-surface overflow-hidden py-24 lg:py-32">
+      <section className="relative bg-surface overflow-hidden min-h-screen flex items-center">
         <div className="absolute inset-0 pointer-events-none" style={{
           backgroundImage: "radial-gradient(circle, rgba(9,9,11,0.05) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
           maskImage: "radial-gradient(ellipse 90% 90% at 50% 50%, black 40%, transparent 100%)",
         }} />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label */}
           <div className="flex items-center gap-4 mb-4">
             <span className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
@@ -506,7 +506,7 @@ export default function CompassPage() {
             </span>
             <div className="flex-1 h-px" style={{ background: "rgba(9,9,11,0.09)" }} />
           </div>
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-12">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-7">
             <h2 className="font-[family-name:var(--font-urbanist)] font-medium leading-[1.06] tracking-[-0.04em] text-ink"
               style={{ fontSize: "clamp(24px,2.8vw,38px)" }}>
               Coming to your city.
@@ -634,7 +634,7 @@ export default function CompassPage() {
       </section>
 
       {/* ── Registration form ────────────────────────────────── */}
-      <section id="register" ref={formRef} className="relative bg-surface overflow-hidden py-24 lg:py-32">
+      <section id="register" ref={formRef} className="relative bg-surface overflow-hidden min-h-screen flex items-start">
         {/* Dark→light blend */}
         <div className="absolute top-0 inset-x-0 h-20 pointer-events-none z-10"
           style={{ background: "linear-gradient(to bottom, rgba(250,250,250,0), rgba(250,250,250,1))" }}
@@ -647,13 +647,13 @@ export default function CompassPage() {
           }}
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10 w-full py-20">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={formInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: EXPO }}
-            className="mb-14"
+            className="mb-10"
           >
             <div className="overflow-hidden mb-3">
               <motion.h2
@@ -697,7 +697,7 @@ export default function CompassPage() {
           </motion.div>
 
           {/* Form label */}
-          <div className="flex items-center gap-4 mb-10">
+          <div className="flex items-center gap-4 mb-6">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(9,9,11,0.30)" }}
@@ -835,10 +835,10 @@ export default function CompassPage() {
       </section>
 
       {/* ── Explore More ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: "#07070A" }}>
+      <section className="relative overflow-hidden min-h-screen flex items-center" style={{ background: "#07070A" }}>
         <div className="absolute inset-0 grid-bg-dark opacity-25 pointer-events-none" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-4 mb-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-12">
+          <div className="flex items-center gap-4 mb-8">
             <span className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(255,255,255,0.38)" }}>
               Explore More

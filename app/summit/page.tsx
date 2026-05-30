@@ -491,7 +491,7 @@ export default function SummitPage() {
       </section>
 
       {/* ── What Is The Summit ───────────────────────────────── */}
-      <section ref={whatRef} className="relative bg-surface overflow-hidden py-24 lg:py-32">
+      <section ref={whatRef} className="relative bg-surface overflow-hidden min-h-screen flex items-center">
         {/* Dot grid */}
         <div className="absolute inset-0 pointer-events-none"
           style={{
@@ -508,9 +508,9 @@ export default function SummitPage() {
           }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Section label */}
-          <div className="flex items-center gap-4 mb-16">
+          <div className="flex items-center gap-4 mb-8">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(9,9,11,0.42)" }}
@@ -529,13 +529,13 @@ export default function SummitPage() {
           </div>
 
           {/* Editorial intro */}
-          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-16 lg:gap-24 mb-20">
+          <div className="grid lg:grid-cols-[1fr_1.1fr] gap-8 lg:gap-14 mb-10">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={whatInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.1, ease: EXPO }}
             >
-              <div className="overflow-hidden mb-8">
+              <div className="overflow-hidden mb-4">
                 <motion.h2
                   initial={{ y: "105%" }}
                   animate={whatInView ? { y: "0%" } : {}}
@@ -547,7 +547,7 @@ export default function SummitPage() {
                 </motion.h2>
               </div>
               <motion.div
-                className="h-px mb-8"
+                className="h-px mb-4"
                 initial={{ width: 0 }}
                 animate={whatInView ? { width: 40 } : {}}
                 transition={{ duration: 0.6, delay: 0.3, ease: EXPO }}
@@ -579,7 +579,7 @@ export default function SummitPage() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────────── */}
-      <section ref={pricingRef} className="relative overflow-hidden py-24 lg:py-32"
+      <section ref={pricingRef} className="relative overflow-hidden min-h-screen flex items-center"
         style={{ background: "#06100D" }}
       >
         <div className="absolute inset-0 grid-bg-dark opacity-30 pointer-events-none" />
@@ -594,9 +594,9 @@ export default function SummitPage() {
           }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label */}
-          <div className="flex items-center gap-4 mb-16">
+          <div className="flex items-center gap-4 mb-8">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(255,255,255,0.38)" }}
@@ -715,13 +715,13 @@ export default function SummitPage() {
       </section>
 
       {/* ── Upcoming Summits ─────────────────────────────────── */}
-      <section ref={destRef} className="relative overflow-hidden py-24 lg:py-32"
+      <section ref={destRef} className="relative overflow-hidden min-h-screen flex items-start"
         style={{ background: "linear-gradient(to bottom, #06100D, #040C09)" }}
       >
         {/* Subtle grid */}
         <div className="absolute inset-0 grid-bg-dark opacity-20 pointer-events-none" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label */}
           <div className="flex items-center gap-4 mb-4">
             <motion.span
@@ -742,7 +742,7 @@ export default function SummitPage() {
           </div>
 
           {/* Heading + sub */}
-          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-14">
+          <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-8">
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               animate={destInView ? { opacity: 1, y: 0 } : {}}
@@ -795,7 +795,7 @@ export default function SummitPage() {
       </section>
 
       {/* ── Application form ─────────────────────────────────── */}
-      <section ref={formRef} className="relative bg-surface overflow-hidden py-24 lg:py-32">
+      <section ref={formRef} className="relative bg-surface overflow-hidden min-h-screen flex items-start">
         {/* Dark→light blend */}
         <div className="absolute top-0 inset-x-0 h-20 pointer-events-none z-10"
           style={{ background: "linear-gradient(to bottom, rgba(250,250,250,0), rgba(250,250,250,1))" }}
@@ -808,10 +808,10 @@ export default function SummitPage() {
           }}
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10 w-full py-20">
           {/* Header */}
           <motion.div
-            className="mb-14"
+            className="mb-10"
             initial={{ opacity: 0, y: 20 }}
             animate={formInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: EXPO }}
@@ -859,7 +859,7 @@ export default function SummitPage() {
           </motion.div>
 
           {/* Form label */}
-          <div className="flex items-center gap-4 mb-10">
+          <div className="flex items-center gap-4 mb-6">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(9,9,11,0.30)" }}
@@ -975,10 +975,10 @@ export default function SummitPage() {
       </section>
 
       {/* ── Explore More ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: "#07070A" }}>
+      <section className="relative overflow-hidden min-h-screen flex items-center" style={{ background: "#07070A" }}>
         <div className="absolute inset-0 grid-bg-dark opacity-25 pointer-events-none" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-4 mb-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-12">
+          <div className="flex items-center gap-4 mb-8">
             <span className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(255,255,255,0.38)" }}>
               Explore More

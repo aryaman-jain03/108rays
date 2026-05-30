@@ -328,10 +328,10 @@ export default function BoardOfNinePage() {
       </section>
 
       {/* ── Inside the Room ──────────────────────────────────── */}
-      <section ref={insideRef} className="relative overflow-hidden py-24 lg:py-32" style={{ background: "#07070A" }}>
+      <section ref={insideRef} className="relative overflow-hidden min-h-screen flex items-center" style={{ background: "#07070A" }}>
         <motion.div className="absolute inset-0 grid-bg-dark opacity-30 pointer-events-none" style={{ y: insideDotY }} />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label */}
           <div className="flex items-center gap-4 mb-4">
             <motion.span
@@ -361,7 +361,7 @@ export default function BoardOfNinePage() {
 
           {/* Who It's For */}
           <motion.div
-            className="mt-20 grid lg:grid-cols-[160px_1fr] gap-8 items-start"
+            className="mt-10 grid lg:grid-cols-[160px_1fr] gap-8 items-start"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
@@ -381,7 +381,7 @@ export default function BoardOfNinePage() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────────── */}
-      <section ref={pricingRef} className="relative overflow-hidden py-24 lg:py-32"
+      <section ref={pricingRef} className="relative overflow-hidden min-h-screen flex items-center"
         style={{ background: "linear-gradient(to bottom, #07070A, #0C0C14)" }}
       >
         {/* Subtle glow centre-right — parallax drift */}
@@ -394,9 +394,9 @@ export default function BoardOfNinePage() {
           }}
         />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-14">
           {/* Label */}
-          <div className="flex items-center gap-4 mb-16">
+          <div className="flex items-center gap-4 mb-8">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(255,255,255,0.38)" }}
@@ -509,7 +509,7 @@ export default function BoardOfNinePage() {
       </section>
 
       {/* ── Application form ─────────────────────────────────── */}
-      <section ref={formRef} className="relative bg-surface overflow-hidden py-24 lg:py-32">
+      <section ref={formRef} className="relative bg-surface overflow-hidden min-h-screen flex items-start">
         <div className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage: "radial-gradient(circle, rgba(9,9,11,0.05) 1px, transparent 1px)",
@@ -523,10 +523,10 @@ export default function BoardOfNinePage() {
           style={{ background: "linear-gradient(to bottom, rgba(250,250,250,0), rgba(250,250,250,1))" }}
         />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10 w-full py-20">
           {/* Header */}
           <motion.div
-            className="mb-14"
+            className="mb-10"
             initial={{ opacity: 0, y: 20 }}
             animate={formInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, ease: EXPO }}
@@ -576,7 +576,7 @@ export default function BoardOfNinePage() {
           </motion.div>
 
           {/* Form label */}
-          <div className="flex items-center gap-4 mb-10">
+          <div className="flex items-center gap-4 mb-6">
             <motion.span
               className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(9,9,11,0.30)" }}
@@ -715,10 +715,10 @@ export default function BoardOfNinePage() {
       </section>
 
       {/* ── Explore More ─────────────────────────────────────── */}
-      <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: "#07070A" }}>
+      <section className="relative overflow-hidden min-h-screen flex items-center" style={{ background: "#07070A" }}>
         <div className="absolute inset-0 grid-bg-dark opacity-25 pointer-events-none" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-4 mb-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 w-full py-12">
+          <div className="flex items-center gap-4 mb-8">
             <span className="font-[family-name:var(--font-inter)] text-[9.5px] font-medium tracking-[.22em] uppercase whitespace-nowrap"
               style={{ color: "rgba(255,255,255,0.38)" }}>
               Explore More
